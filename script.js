@@ -4,6 +4,7 @@ const music = document.getElementById("backgroundMusic");
 const musicButton = document.getElementById("musicButton");
 
 const clickSound = document.getElementById("clickSound");
+const secretSound = document.getElementById("secretSound");
 
 musicButton.addEventListener("click", () => {
 
@@ -25,6 +26,15 @@ function playClickSound() {
     clickSound.play();
 }
 
+function checkSecret() {
+
+    if (display.value === "67") {
+
+        secretSound.currentTime = 0;
+        secretSound.play();
+    }
+}
+
 function formatDisplay(value) {
 
     return value.replace(/\d+/g, number => {
@@ -38,7 +48,6 @@ function addToDisplay(value) {
 
     let currentValue = display.value;
 
-    // Tausenderpunkte entfernen
     currentValue = currentValue.replace(/\./g, "");
 
     currentValue += value;
@@ -46,6 +55,8 @@ function addToDisplay(value) {
     display.value = formatDisplay(currentValue);
 
     playClickSound();
+
+    checkSecret();
 }
 
 function clearDisplay() {
@@ -55,11 +66,11 @@ function clearDisplay() {
     playClickSound();
 }
 
+
 function deleteLast() {
 
     let currentValue = display.value;
 
-    // Tausenderpunkte entfernen
     currentValue = currentValue.replace(/\./g, "");
 
     currentValue = currentValue.slice(0, -1);
@@ -77,12 +88,13 @@ function calculate() {
 
         let expression = display.value;
 
-        // Tausenderpunkte entfernen
         expression = expression.replace(/\./g, "");
 
         const result = eval(expression);
 
         display.value = Number(result).toLocaleString("de-DE");
+
+        checkSecret();
 
     } catch {
 
@@ -97,7 +109,6 @@ document.addEventListener("keydown", (event) => {
     if (key >= "0" && key <= "9") {
 
         addToDisplay(key);
-
     }
 
     else if (
@@ -109,31 +120,26 @@ document.addEventListener("keydown", (event) => {
     ) {
 
         addToDisplay(key);
-
     }
 
     else if (key === "." || key === ",") {
 
         addToDisplay(".");
-
     }
 
     else if (key === "Enter" || key === "=") {
 
         calculate();
-
     }
 
     else if (key === "Backspace") {
 
         deleteLast();
-
     }
 
     else if (key === "Escape") {
 
         clearDisplay();
-
     }
 
 });
